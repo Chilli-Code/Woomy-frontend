@@ -2,5 +2,19 @@
     margin:0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Roboto',sans-serif;
+    font-family: 'Roboto', sans-serif !important;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url('/public/fonts/Roboto-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+
+:root{
+    --BtnColorPrincipal: #2563eb;
+    --BtnColorPrincipalHover: #2951b5;
+    --buttonBlueWidth: 320px;
+    --buttonBlueHeight: 44px;
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "react-feather";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import Register from "./Register";
 
 const ContainerAnimation = styled(motion.div)`
   width: 100%;
@@ -59,7 +60,6 @@ const Input = styled.input`
     box-shadow: 0 0 0 1px rgb(0 0 0 / 6%);
   }
 
-
   &:focus + label,
   &:not(:placeholder-shown) + label {
     transform: translateY(-1.5rem);
@@ -78,7 +78,6 @@ const Label = styled.label`
   pointer-events: none;
   transition: all 0.3s ease;
   font-size: 14px;
-
 
   ${Input}:focus + &,
   ${Input}:not(:placeholder-shown) + & {
@@ -130,12 +129,12 @@ const ForgotPassword = styled.a`
 
 const SubmitButton = styled.button`
   width: 320px;
-  background-color: #2563eb;
+  background-color: var(--BtnColorPrincipal);
   color: #ffffff;
   line-height: 16px;
   font-size: 16px;
   font-weight: 500;
-  padding: 10px 15px 10px 15px;
+  padding: 10px 15px;
   margin-top: 16px;
   border: none;
   cursor: pointer;
@@ -144,7 +143,7 @@ const SubmitButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #2951b5;
+    background-color: var(--BtnColorPrincipalHover);
   }
 `;
 
@@ -182,63 +181,69 @@ const Form = styled.form`
 `;
 
 const containerAnimation = {
-  hidden: { opacity: 0, y: 200 }, 
-  visible: { opacity: 1, y: 0 }, 
+  hidden: { opacity: 0, y: 200 },
+  visible: { opacity: 1, y: 0 },
 };
+
 export default function LoginCard() {
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  const [showRegister, setShowRegister] = useState(false); // Nuevo estado para controlar el registro
 
   return (
     <ContainerAnimation
       initial="hidden"
-      animate="visible" 
-      variants={containerAnimation} 
-      transition={{ duration: 0.8, ease: "easeOut" }} 
+      animate="visible"
+      variants={containerAnimation}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <Card>
-        <div>
-          <Title>¡Bienvenido!</Title>
-        </div>
-        <Form>
-          <InputContainer>
-            <Input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder=" "
-            />
-            <Label htmlFor="email">Correo electrónico</Label>
-          </InputContainer>
+      {showRegister ? (
+        <Register />
+      ) : (
+        <Card>
+          <div>
+            <Title>¡Bienvenido!</Title>
+          </div>
+          <Form>
+            <InputContainer>
+              <Input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder=" "
+              />
+              <Label htmlFor="email">Correo electrónico</Label>
+            </InputContainer>
 
-          <PasswordContainer>
-            <Input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder=" "
-            />
-            <Label htmlFor="password">Contraseña</Label>
-            <ToggleButton
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-            </ToggleButton>
-          </PasswordContainer>
+            <PasswordContainer>
+              <Input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder=" "
+              />
+              <Label htmlFor="password">Contraseña</Label>
+              <ToggleButton
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+              </ToggleButton>
+            </PasswordContainer>
 
-          <Textright>
-            <ForgotPassword href="#">¿Olvidaste tu contraseña?</ForgotPassword>
-          </Textright>
-          <SubmitButton type="submit">Iniciar Sesión</SubmitButton>
-        </Form>
-        <DivRegister>
-          <RegisterButton>Regístrate</RegisterButton>
-        </DivRegister>
-      </Card>
+            <Textright>
+              <ForgotPassword href="#">¿Olvidaste tu contraseña?</ForgotPassword>
+            </Textright>
+            <SubmitButton type="submit">Iniciar Sesión</SubmitButton>
+          </Form>
+          <DivRegister>
+            <RegisterButton onClick={() => setShowRegister(true)}>Regístrate</RegisterButton>
+          </DivRegister>
+        </Card>
+      )}
     </ContainerAnimation>
   );
 }

@@ -2,15 +2,18 @@
 import Layout from '../layouts/Layout.astro';
 import LoginCard from '../components/Inicio.jsx';
 import BackgroundWithLogo from '../components/Fondo.jsx';
+import Register from '../components/Register.jsx';
 import Slider from '../components/Guia.jsx';
+
 ---
 
 <Layout title="Welcome to Astro.">
-	<!-- <div class="containerLogin">
+	<div class="containerLogin">
 	  <BackgroundWithLogo client:only="react" />
-		  <LoginCard client:only="react" />
-	</div> -->
-	<Slider client:only="react" />
+      <LoginCard client:only="react" />
+
+	</div>
+	<!-- <Slider client:only="react" /> -->
   </Layout>
   
 <style>
