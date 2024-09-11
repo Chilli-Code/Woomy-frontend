@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VerificationCode from '../components/Verification';
+import BackgroundWithLogoHeight from '../components/FondoHeight.jsx';
+
+
+
+
+---
+
+<Layout title="Welcome to Astro.">
+	<div class="containerLogin">
+	  <BackgroundWithLogoHeight client:only="react" />
+      <VerificationCode client:only="react" />
+
+	</div>
+  </Layout>
+  
+  <style>
+    .containerLogin {
+        min-height: 100vh;
+        background: #2563eb;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    </style>

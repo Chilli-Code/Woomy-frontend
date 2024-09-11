@@ -3,6 +3,8 @@ import { Eye, EyeOff } from "react-feather";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import Register from "./Register";
+import Slider from "./Guia";  
+
 
 const ContainerAnimation = styled(motion.div)`
   width: 100%;
@@ -10,7 +12,6 @@ const ContainerAnimation = styled(motion.div)`
   justify-content: center;
   align-items: center;
   position: relative;
-  top: 100px;
 `;
 
 const Card = styled.div`
@@ -184,12 +185,16 @@ const containerAnimation = {
   hidden: { opacity: 0, y: 200 },
   visible: { opacity: 1, y: 0 },
 };
-
+const handleSliderComplete = () => {
+  setShowSlider(false);
+  setShowRegister(true);
+};
 export default function LoginCard() {
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
-  const [showRegister, setShowRegister] = useState(false); // Nuevo estado para controlar el registro
+  const [showRegister, setShowRegister] = useState(false);  // Para controlar el formulario de registro
+  const [showSlider, setShowSlider] = useState(false);      // Para controlar el slider
 
   return (
     <ContainerAnimation
@@ -198,9 +203,11 @@ export default function LoginCard() {
       variants={containerAnimation}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      {showRegister ? (
+      {showSlider ? (
+        <Slider onComplete={handleSliderComplete} />
+      ) : showRegister ? (
         <Register />
-      ) : (
+      ):(
         <Card>
           <div>
             <Title>¡Bienvenido!</Title>
@@ -240,7 +247,7 @@ export default function LoginCard() {
             <SubmitButton type="submit">Iniciar Sesión</SubmitButton>
           </Form>
           <DivRegister>
-            <RegisterButton onClick={() => setShowRegister(true)}>Regístrate</RegisterButton>
+            <RegisterButton onClick={() => setShowSlider(true)}>Regístrate</RegisterButton>
           </DivRegister>
         </Card>
       )}

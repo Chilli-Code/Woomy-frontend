@@ -1,19 +1,17 @@
 import styled from "styled-components";
 
-
 const BackgroundContainer = styled.div`
-  width: 360px; 
-  height: 257px; 
-  background-image: url("/img/LogoFondo.png"); 
-  background-size: contain; 
-  background-position: center; 
-  background-repeat: no-repeat; 
+  width: 100%;
+  height: ${({ showRegister }) => (showRegister ? "400px" : "257px")}; /* Cambia el tamaño según el estado */
+  background-image: url("/img/LogoFondo.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  transition: height 0.3s ease; /* Transición suave cuando cambie el tamaño */
 `;
-
 
 const LogoContainer = styled.div`
   display: flex;
@@ -23,15 +21,13 @@ const LogoContainer = styled.div`
 `;
 
 const SVGLogo = styled.svg`
-  width: 100px; 
+  width: 100px;
   height: 100px;
 `;
 
-
-
-export default function BackgroundWithLogo() {
+export default function BackgroundWithLogo({ showRegister }) {
   return (
-    <BackgroundContainer>
+    <BackgroundContainer showRegister={showRegister}>
       <LogoContainer>
         <SVGLogo
           width="139"

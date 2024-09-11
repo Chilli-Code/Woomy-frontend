@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Eye, EyeOff, ArrowLeft } from "react-feather";
+import { Eye, EyeOff } from "react-feather";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import LoginCard from "./Inicio";
+
 
 const ContainerAnimation = styled(motion.div)`
   width: 100%;
@@ -10,7 +11,6 @@ const ContainerAnimation = styled(motion.div)`
   justify-content: center;
   align-items: center;
   position: relative;
-  top: 20px;
 `;
 
 const Card = styled.div`
@@ -93,6 +93,17 @@ const Input = styled.input`
     line-height: 11px;
     color: #282b2c;
   }
+    /* Estilos específicos para quitar los botones de incremento y decremento */
+    &[type="number"]::-webkit-inner-spin-button,
+  &[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Para otros navegadores */
+  &[type="number"] {
+    -moz-appearance: textfield; /* Quitar flechas en Firefox */
+  }
 `;
 
 const Label = styled.label`
@@ -153,6 +164,8 @@ const SubmitButton = styled.button`
 `;
 
 
+
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -171,7 +184,7 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [confpassword, setConfpassword] = useState("");
   const [showPasswordconf, setShowPasswordconf] = useState(false);
-  const [showSession, setShowSession] = useState(false); // Nuevo estado para controlar el registro
+  const [showSession, setShowSession] = useState(false); 
 
   return (
     <ContainerAnimation
@@ -181,9 +194,9 @@ export default function Register() {
       transition={{ duration: 0.8, ease: "easeOut" }} 
     >
         {showSession ? (
-            <LoginCard />
+          <LoginCard />
         ) : (
-      <Card>
+          <Card>
         <DivTitulo>
             <div>
                 <button onClick={() => setShowSession(true)}>

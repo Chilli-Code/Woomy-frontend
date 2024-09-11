@@ -1,25 +1,30 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
+import Register from "./Register"; // Importa el componente Register
 
 // Contenedor principal
 const Container = styled.div`
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background: #fff;
+
+    bottom: -300px;
+    position: absolute;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #fff;
 `;
 
 // Imagen de fondo y animación
 const ImageContainer = styled(motion.div)`
-  width: 100%;
-  height: 300px;
-  border-radius: 20px;
+  width: 390px;
+  height: 509px;
+  border-radius: 0px 0px 40px 40px;
   background-size: cover;
   background-position: center;
 `;
@@ -90,6 +95,11 @@ const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   margin: 10px 0;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--BtnColorPrincipalHover);
+  }
 `;
 
 const SkipButton = styled.button`
@@ -112,6 +122,7 @@ const slideVariants = {
 
 export default function Slider() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [showRegister, setShowRegister] = useState(false); // Estado para mostrar Register
 
   const slides = [
     {
@@ -135,16 +146,26 @@ export default function Slider() {
   ];
 
   const handleNextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    if (currentSlide < slides.length - 1) {
+      setCurrentSlide((prevSlide) => prevSlide + 1);
+    } else {
+      setShowRegister(true); // Cambia a la vista de registro cuando terminen las diapositivas
+    }
   };
 
   const handleSkip = () => {
-    // Aquí puedes manejar lo que sucede al presionar "Skip"
+    setShowRegister(true); // Mostrar el registro al hacer clic en "Skip"
   };
+
+  // Mostrar el formulario de registro cuando se completen las diapositivas
+  if (showRegister) {
+    return <Register />;
+  }
 
   return (
     <Container>
       <AnimatePresence mode="wait">
+        <div>
         <ImageContainer
           key={slides[currentSlide].image}
           style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
@@ -152,9 +173,11 @@ export default function Slider() {
           animate="animate"
           exit="exit"
           variants={slideVariants}
-          transition={{ duration: 0.6, ease: "easeInOut" }} // Transición suave
+          transition={{ duration: 0.6, ease: "easeInOut" }}
         />
+        </div>
       </AnimatePresence>
+
       {/* Puntos indicadores con la barra de estiramiento */}
       <DotsContainer $currentSlide={currentSlide}>
         {/* Barra que se mueve para cubrir los puntos */}
@@ -168,10 +191,7 @@ export default function Slider() {
 
         {/* Puntos indicadores */}
         {slides.map((_, index) => (
-          <Dot
-            key={index}
-            $visible={index <= currentSlide} // El punto actual y los anteriores son azules
-          />
+          <Dot key={index} $visible={index <= currentSlide} />
         ))}
       </DotsContainer>
       <Title>{slides[currentSlide].title}</Title>
