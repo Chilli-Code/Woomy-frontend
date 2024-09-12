@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const BackgroundContainer = styled.div`
   width: 100%;
-  height: ${({ showRegister }) => (showRegister ? "400px" : "257px")}; /* Cambia el tamaño según el estado */
+  height: 257px; /* Ajusta la altura para que ocupe solo la parte superior */
   background-image: url("/img/LogoFondo.png");
   background-size: contain;
   background-position: center;
@@ -10,7 +10,7 @@ const BackgroundContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: height 0.3s ease; /* Transición suave cuando cambie el tamaño */
+  margin-top: 20px; /* Añade espacio entre el logo y la tarjeta */
 `;
 
 const LogoContainer = styled.div`

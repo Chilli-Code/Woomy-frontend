@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import VerificationCode from '../components/Verification';
-import BackgroundWithLogoHeight from '../components/FondoHeight.jsx';
 
 
 
@@ -10,7 +9,6 @@ import BackgroundWithLogoHeight from '../components/FondoHeight.jsx';
 
 <Layout title="Welcome to Astro.">
 	<div class="containerLogin">
-	  <BackgroundWithLogoHeight client:only="react" />
       <VerificationCode client:only="react" />
 
 	</div>

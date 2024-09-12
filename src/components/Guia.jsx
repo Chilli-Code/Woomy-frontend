@@ -5,14 +5,11 @@ import Register from "./Register"; // Importa el componente Register
 
 // Contenedor principal
 const Container = styled.div`
-
-    bottom: -300px;
-    position: absolute;
+    position: relative;
     min-height: 100vh;
     width: 100%;
-    max-width: 420px;
     margin: 0 auto;
-    padding: 20px;
+    /* padding: 20px; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,7 +19,7 @@ const Container = styled.div`
 
 // Imagen de fondo y animación
 const ImageContainer = styled(motion.div)`
-  width: 390px;
+  width: 100%;
   height: 509px;
   border-radius: 0px 0px 40px 40px;
   background-size: cover;
@@ -100,6 +97,9 @@ const Button = styled.button`
   &:hover {
     background-color: var(--BtnColorPrincipalHover);
   }
+  @media (max-width: 375px) {
+    width:100%;
+  }
 `;
 
 const SkipButton = styled.button`
@@ -112,7 +112,9 @@ const SkipButton = styled.button`
   cursor: pointer;
   text-decoration: none;
 `;
-
+const DivImage = styled.div`
+  width:100%;
+`;
 // Animación para las transiciones de los slides
 const slideVariants = {
   initial: { opacity: 0, x: 100 },
@@ -120,7 +122,7 @@ const slideVariants = {
   exit: { opacity: 0, x: -100 },
 };
 
-export default function Slider() {
+export default function Slider({onComplete}) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showRegister, setShowRegister] = useState(false); // Estado para mostrar Register
 
@@ -147,9 +149,9 @@ export default function Slider() {
 
   const handleNextSlide = () => {
     if (currentSlide < slides.length - 1) {
-      setCurrentSlide((prevSlide) => prevSlide + 1);
+      setCurrentSlide(currentSlide + 1);
     } else {
-      setShowRegister(true); // Cambia a la vista de registro cuando terminen las diapositivas
+      onComplete(); // Llamar a la función onComplete cuando el slider termine
     }
   };
 
@@ -165,17 +167,26 @@ export default function Slider() {
   return (
     <Container>
       <AnimatePresence mode="wait">
-        <div>
+        <DivImage>
         <ImageContainer
           key={slides[currentSlide].image}
-          style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
           initial="initial"
           animate="animate"
           exit="exit"
           variants={slideVariants}
           transition={{ duration: 0.6, ease: "easeInOut" }}
-        />
-        </div>
+        >
+          <img
+            src={slides[currentSlide].image}
+            alt={slides[currentSlide].title}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+          </ImageContainer>
+        </DivImage>
       </AnimatePresence>
 
       {/* Puntos indicadores con la barra de estiramiento */}
@@ -198,7 +209,9 @@ export default function Slider() {
       <Description>{slides[currentSlide].description}</Description>
 
       {/* Botón Siguiente */}
-      <Button onClick={handleNextSlide}>Siguiente</Button>
+      <Button onClick={handleNextSlide}>
+        {currentSlide < slides.length - 1 ? "Continuar" : "Continuar"}
+      </Button>
 
       {/* Botón Skip */}
       <SkipButton onClick={handleSkip}>Skip</SkipButton>

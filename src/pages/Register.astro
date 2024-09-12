@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RegisterUser from "../components/RegisterUser.jsx";
+import BackgroundWithLogo from "../components/Fondo.jsx";
+---
+
+<Layout title="Welcome to Astro.">
+  <div class="containerLogin">
+    <BackgroundWithLogo client:only="react" />
+<RegisterUser client:only="react" />
+</div>
+</Layout>
+
+
+<style>
+    .containerLogin {
+        min-height: 100vh;
+        background: #2563eb;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    </style>

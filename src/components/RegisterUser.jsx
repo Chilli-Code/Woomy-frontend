@@ -14,9 +14,9 @@ const ContainerAnimation = styled(motion.div)`
 `;
 
 const Card = styled.div`
-  width: 421px;
+  width: 100%;
   height: 580px;
-  max-width: 400px;
+  /* max-width: 400px; */
   background-color: #ffffff;
   display: flex;
   justify-content: center;
@@ -104,6 +104,9 @@ const Input = styled.input`
   &[type="number"] {
     -moz-appearance: textfield; /* Quitar flechas en Firefox */
   }
+  @media (max-width: 375px) {
+    width:100%;
+  }
 `;
 
 const Label = styled.label`
@@ -161,11 +164,21 @@ const SubmitButton = styled.button`
   &:hover {
     background-color: var(--BtnColorPrincipalHover);
   }
+  @media (max-width: 375px) {
+    width:100%;
+  }
 `;
 
-
-
-
+const DivCnt = styled.div`
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:auto;
+  @media (max-width: 375px) {
+    width:100%;
+  }
+`;
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -177,7 +190,7 @@ const containerAnimation = {
   visible: { opacity: 1, y: 0 }, 
 };
 
-export default function Register({ onBack }) { // Recibe la función onBack para volver al login
+export default function RegisterUser() { // Recibe la función onBack para volver al login
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -189,17 +202,18 @@ export default function Register({ onBack }) { // Recibe la función onBack para
     <ContainerAnimation
       initial="hidden"
       animate="visible" 
-      variants={containerAnimation} 
-      transition={{ duration: 0.8, ease: "easeOut" }} 
+      variants={containerAnimation}
+      transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <Card>
+      <DivCnt>
         <DivTitulo>
           <div>
-            <button onClick={onBack}> {/* Usa onBack para regresar al Login */}
+            <a href="/">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.5 12.0041C6.50417 12.4428 6.68587 12.8623 7.00571 13.1716L10.6829 16.7575C10.8435 16.9128 11.0607 17 11.2871 17C11.5136 17 11.7308 16.9128 11.8914 16.7575C11.9718 16.68 12.0355 16.5877 12.079 16.4861C12.1226 16.3845 12.145 16.2755 12.145 16.1654C12.145 16.0553 12.1226 15.9463 12.079 15.8447C12.0355 15.7431 11.9718 15.6508 11.8914 15.5733L9.07143 12.838L17.6429 12.838C17.8702 12.838 18.0882 12.7501 18.2489 12.5938C18.4097 12.4374 18.5 12.2252 18.5 12.0041C18.5 11.7829 18.4097 11.5708 18.2489 11.4144C18.0882 11.258 17.8702 11.1701 17.6429 11.1701L9.07143 11.1701L11.8914 8.4265C12.0528 8.27057 12.144 8.05865 12.1448 7.83735C12.1456 7.61606 12.056 7.40351 11.8957 7.24648C11.7354 7.08945 11.5176 7.00079 11.2902 7.00001C11.0627 6.99922 10.8443 7.08638 10.6829 7.24231L7.00571 10.8282C6.68378 11.1396 6.50191 11.5624 6.5 12.0041Z" fill="#282B2C"/>
               </svg>
-            </button>
+            </a>
           </div>
           <Title>Registro</Title>
           <p>Ingresa los datos para registrar tu cuenta.</p>
@@ -209,7 +223,7 @@ export default function Register({ onBack }) { // Recibe la función onBack para
             <Input
               type="text"
               id="name"
-              placeholder="Nombre"
+              placeholder=""
             />
             <Label htmlFor="name">Nombre</Label>
           </InputContainer>
@@ -267,7 +281,8 @@ export default function Register({ onBack }) { // Recibe la función onBack para
           </PasswordContainer>
           <SubmitButton type="submit">Continuar</SubmitButton>
         </Form>
+        </DivCnt>
       </Card>
     </ContainerAnimation>
-  );
-}
+      );
+    }
