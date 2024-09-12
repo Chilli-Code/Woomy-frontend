@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import Register from "./Register"; // Importa el componente Register
+import RegisterUser from "./RegisterUser"; // Importa el componente Register
 
 // Contenedor principal
 const Container = styled.div`
@@ -20,7 +20,7 @@ const Container = styled.div`
 // Imagen de fondo y animación
 const ImageContainer = styled(motion.div)`
   width: 100%;
-  height: 509px;
+  height: 480px;
   border-radius: 0px 0px 40px 40px;
   background-size: cover;
   background-position: center;
@@ -32,6 +32,8 @@ const Title = styled.h2`
   font-weight: 700;
   margin: 5px 0px 20px 0px;
   line-height: 36.38px;
+  color: var(--TittleBlack);
+
 `;
 
 const Description = styled.p`
@@ -101,6 +103,15 @@ const Button = styled.button`
     width:100%;
   }
 `;
+const DivButton = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 123px;
+    flex-direction: column;
+    margin-top: 40px;
+`;
 
 const SkipButton = styled.button`
   background: none;
@@ -110,10 +121,12 @@ const SkipButton = styled.button`
   line-height: 14.98px;
   font-weight: 700;
   cursor: pointer;
+  margin-top:10px;
   text-decoration: none;
 `;
 const DivImage = styled.div`
   width:100%;
+  overflow: hidden;
 `;
 // Animación para las transiciones de los slides
 const slideVariants = {
@@ -151,12 +164,16 @@ export default function Slider({onComplete}) {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
-      onComplete(); // Llamar a la función onComplete cuando el slider termine
+      window.location.href = "/Register";
     }
   };
 
   const handleSkip = () => {
-    setShowRegister(true); // Mostrar el registro al hacer clic en "Skip"
+    if (currentSlide === slides.length - 1) {
+      window.location.href = "/Login";
+    } else {
+      window.location.href = "/Register";
+    }
   };
 
   // Mostrar el formulario de registro cuando se completen las diapositivas
@@ -176,13 +193,16 @@ export default function Slider({onComplete}) {
           variants={slideVariants}
           transition={{ duration: 0.6, ease: "easeInOut" }}
         >
-          <img
+          <img draggable="false"
             src={slides[currentSlide].image}
             alt={slides[currentSlide].title}
             style={{
               width: "100%",
               height: "100%",
               objectFit: "cover",
+              borderRadius:"0px 0px 40px 40px",
+              userSelect: "none",
+              userDrag: "none",
             }}
           />
           </ImageContainer>
@@ -207,14 +227,17 @@ export default function Slider({onComplete}) {
       </DotsContainer>
       <Title>{slides[currentSlide].title}</Title>
       <Description>{slides[currentSlide].description}</Description>
-
+      <DivButton>
       {/* Botón Siguiente */}
       <Button onClick={handleNextSlide}>
-        {currentSlide < slides.length - 1 ? "Continuar" : "Continuar"}
+        {currentSlide < slides.length - 1 ? "Siguiente" : "Siguiente"}
       </Button>
-
       {/* Botón Skip */}
-      <SkipButton onClick={handleSkip}>Skip</SkipButton>
+      <SkipButton onClick={handleSkip}>
+        {currentSlide === slides.length - 1 ? "" : "Skip"}
+        </SkipButton>
+      </DivButton>
+
     </Container>
   );
 }

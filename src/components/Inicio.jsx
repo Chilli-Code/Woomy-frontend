@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "react-feather";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import Register from "./Register";
+import RegisterUser from "./RegisterUser";
 import Slider from "./Guia";
 
 
@@ -16,7 +16,7 @@ const ContainerAnimation = styled(motion.div)`
 
 const Card = styled.div`
   width: 100%;
-  height: 421px;
+  height: 100%;
   max-width: 100%;
   background-color: #ffffff;
   display: flex;
@@ -36,7 +36,7 @@ const Title = styled.h2`
   text-align: left;
   letter-spacing: -0.02em;
   margin-bottom: 24px;
-  font-family: "Roboto", sans-serif;
+  color: var(--TittleBlack);
 `;
 
 const InputContainer = styled.div`
@@ -214,6 +214,7 @@ export default function LoginCard({ onRegister }) {
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
+  
 
   return (
     <ContainerAnimation
@@ -258,7 +259,9 @@ export default function LoginCard({ onRegister }) {
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </ToggleButton>
           </PasswordContainer>
-
+            <Textright>
+            <ForgotPassword href="#">¿Olvidaste tu contraseña?</ForgotPassword>
+            </Textright>
           <SubmitButton type="submit">Iniciar Sesión</SubmitButton>
         </Form>
         <DivRegister>

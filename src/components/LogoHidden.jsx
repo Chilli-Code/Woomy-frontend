@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import LoginCard from './Inicio.jsx'; // Componente Login
 import BackgroundWithLogo from './Fondo.jsx'; // Logo
-import styled from 'styled-components';
-import Slider from './Guia.jsx'; // Slider (Guia)
+import Slider from './Guia.jsx'; // Slider
 
 const ContainerLogin = styled.div`
   min-height: 100vh;
@@ -14,32 +15,70 @@ const ContainerLogin = styled.div`
   align-items: center;
 `;
 
-export default function LoginSliderContainer() {
-  const [showSlider, setShowSlider] = useState(false); // Controla la visibilidad del slider
+const LogoContainer = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 150px;
+  margin-top: ${(props) => (props.moveUp ? '0' : '40vh')}; /* Cambia la posición del logo */
+  transition: margin-top 1s ease; /* Animación suave para mover el logo */
+`;
 
-  // Función para mostrar el slider
+const FormContainer = styled(motion.div)`
+  display: ${(props) => (props.show ? 'flex' : 'none')}; /* Solo muestra el login cuando esté listo */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+export default function LoginSliderContainer() {
+  const [showLogoInCenter, setShowLogoInCenter] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSlider, setShowSlider] = useState(false);
+
+  // Efecto para mover el logo y mostrar el login después de la animación
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLogoInCenter(false);
+      setShowLogin(true);
+    }, 2000); // Tiempo en milisegundos antes de mover el logo y mostrar el login
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Función para mostrar el slider cuando se hace clic en "Regístrate"
   const handleShowSlider = () => {
     setShowSlider(true); // Muestra el Slider
   };
 
   // Función para volver al LoginCard
   const handleBackToLogin = () => {
-    setShowSlider(false); // Oculta el Slider
+    setShowSlider(false); // Oculta el Slider y vuelve al Login
   };
 
   return (
     <ContainerLogin>
-      {/* Mostrar el logo solo cuando el Slider no está visible */}
-      {!showSlider && <BackgroundWithLogo />}
-
-      {/* Mostrar el LoginCard si no se está mostrando el slider */}
+      {/* Mostrar el logo solo cuando el slider no está visible */}
       {!showSlider && (
-        <LoginCard
-          onRegister={handleShowSlider} // Muestra el Slider cuando se hace clic en "Regístrate"
-        />
+        <LogoContainer
+          initial={{ opacity: 0, scale: 0.8 }} // Comienza invisible y más pequeño
+          animate={{ opacity: 1, scale: 1 }} // Se hace visible y tamaño normal
+          transition={{ duration: 1.2, ease: 'easeOut' }} // Tiempo de la animación
+          moveUp={!showLogoInCenter}
+        >
+          <BackgroundWithLogo />
+        </LogoContainer>
       )}
 
-      {/* Mostrar el Slider cuando sea necesario */}
+      {/* Mostrar el formulario de login una vez que el logo se haya movido */}
+      {!showSlider && (
+        <FormContainer show={showLogin}>
+          <LoginCard onRegister={handleShowSlider} />
+        </FormContainer>
+      )}
+
+      {/* Mostrar el slider cuando se hace clic en "Regístrate" */}
       {showSlider && <Slider onComplete={handleBackToLogin} />}
     </ContainerLogin>
   );
