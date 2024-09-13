@@ -28,6 +28,7 @@ const LogoContainer = styled(motion.div)`
 const FormContainer = styled(motion.div)`
   display: ${(props) => (props.show ? 'flex' : 'none')}; /* Solo muestra el login cuando esté listo */
   flex-direction: column;
+  width:100%;
   justify-content: center;
   align-items: center;
   margin-top: 20px;

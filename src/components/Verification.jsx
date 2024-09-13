@@ -130,6 +130,7 @@ const VerifiedMessage = styled.div`
   display: flex;
   flex-direction: column;
   gap: 25px;
+  height:100%;
 
   h3 {
     text-align: center;

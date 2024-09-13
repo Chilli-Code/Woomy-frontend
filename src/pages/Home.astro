@@ -1,6 +1,12 @@
 ---
 import WalkRequest from "../components/Home/Home.jsx";
+import RideService from "../components/Home/AddService.jsx";
+import ModalUbi from "../components/ui/ModalUbi.jsx";
+import Layout from '../layouts/Layout.astro';
+
 ---
+<Layout title="Welcome to Astro.">
+<!-- <WalkRequest client:only="react" /> -->
+<RideService client:only="react" />
 
-<WalkRequest client:only="react" />
-
+</Layout>
