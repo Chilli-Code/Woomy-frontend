@@ -210,7 +210,7 @@ const Header = styled.header`
                 <RequestLabel>Solicitar paseo</RequestLabel>
                 <Selefnd>
                 <PlusButton>
-                  <StyledPlusCircle />
+                  <StyledPlusCircle  onClick={() => (window.location.href = "/Service")} />
                 </PlusButton>
                 </Selefnd>
               </CardOverlay>
