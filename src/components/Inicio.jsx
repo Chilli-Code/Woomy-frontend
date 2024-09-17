@@ -8,10 +8,13 @@ import Slider from "./Guia";
 
 const ContainerAnimation = styled(motion.div)`
   width: 100%;
+  height:100%;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+  @media(max-width: 990px){
+  }
 `;
 
 const Card = styled.div`
@@ -23,10 +26,13 @@ const Card = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border-radius: 40px 40px 0px 0px;
+  border-radius: 0px;
   box-shadow: 0px -2px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 24px;
-  margin-top: auto; 
+  margin-top: auto;
+  @media(max-width: 990px){
+    border-radius:40px 40px 0px 0px;
+  }
 `;
 
 const Title = styled.h2`

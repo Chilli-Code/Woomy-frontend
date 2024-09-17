@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import RegisterUser from "./RegisterUser"; // Importa el componente Register
+import { Columns } from "react-feather";
 
 // Contenedor principal
 const Container = styled.div`
@@ -11,19 +12,33 @@ const Container = styled.div`
     margin: 0 auto;
     /* padding: 20px; */
     display: flex;
-    flex-direction: column;
     align-items: center;
     text-align: center;
     background: #fff;
+    @media(max-width: 990px){
+      flex-direction: column;
+    }
+
 `;
 
 // Imagen de fondo y animación
 const ImageContainer = styled(motion.div)`
   width: 100%;
-  height: 480px;
+  height: 100%;
   border-radius: 0px 0px 40px 40px;
   background-size: cover;
   background-position: center;
+  
+  @media(max-width: 990px){
+    height: 700px;
+  }
+img{
+  border-radius:0px;
+  @media(max-width: 990px){
+    border-radius: 0px 0px 40px 40px;
+  }
+}
+
 `;
 
 // Título y descripción
@@ -126,7 +141,13 @@ const SkipButton = styled.button`
 `;
 const DivImage = styled.div`
   width:100%;
-  overflow: hidden;
+  height:100vh;
+  overflow:hidden;
+
+  @media(max-width: 990px){
+    height:100%;
+  }
+
 `;
 // Animación para las transiciones de los slides
 const slideVariants = {
@@ -200,7 +221,6 @@ export default function Slider({onComplete}) {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              borderRadius:"0px 0px 40px 40px",
               userSelect: "none",
               userDrag: "none",
             }}
@@ -208,8 +228,16 @@ export default function Slider({onComplete}) {
           </ImageContainer>
         </DivImage>
       </AnimatePresence>
-
       {/* Puntos indicadores con la barra de estiramiento */}
+      <div
+      style={{
+        width: "100%",
+        display:"flex",
+        flexDirection:"Column",
+        alignItems:"center",
+        padding:"20px",
+
+      }}>
       <DotsContainer $currentSlide={currentSlide}>
         {/* Barra que se mueve para cubrir los puntos */}
         <StretchBar
@@ -237,7 +265,7 @@ export default function Slider({onComplete}) {
         {currentSlide === slides.length - 1 ? "" : "Skip"}
         </SkipButton>
       </DivButton>
-
+      </div>
     </Container>
   );
 }

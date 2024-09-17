@@ -10,10 +10,13 @@ const ContainerLogin = styled.div`
   background: #2563eb;
   width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  @media(max-width: 990px){
+    flex-direction:column;
+  }
 `;
+
 
 const LogoContainer = styled(motion.div)`
   display: flex;
@@ -23,15 +26,22 @@ const LogoContainer = styled(motion.div)`
   height: 150px;
   margin-top: ${(props) => (props.moveUp ? '0' : '40vh')}; /* Cambia la posición del logo */
   transition: margin-top 1s ease; /* Animación suave para mover el logo */
+
 `;
 
 const FormContainer = styled(motion.div)`
   display: ${(props) => (props.show ? 'flex' : 'none')}; /* Solo muestra el login cuando esté listo */
   flex-direction: column;
   width:100%;
+  height:100vh;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  
+  @media(max-width: 990px){
+    height:100%;
+    margin-top: 20px;
+  }
+
 `;
 
 export default function LoginSliderContainer() {

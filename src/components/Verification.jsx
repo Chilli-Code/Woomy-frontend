@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 
 const Container = styled(motion.div)`
-  width: 100%;
+  width: auto;
   position: relative;
   height: 100vh;
   margin-top: 20px;
@@ -49,7 +49,7 @@ const Description = styled.p`
 
 const CodeInputWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   margin-bottom: 24px;
 `;
 
@@ -148,6 +148,12 @@ const TextP = styled.p`
   color: var(--TextGray);
 `;
 
+const DivSVG = styled(motion.div)`
+  display: flex;
+  width:100%;
+  justify-content: center;
+`;
+
 const containerVariants = {
   hidden: { opacity: 0, y: "-100vh" },
   visible: {
@@ -213,7 +219,7 @@ export default function VerificationCode({ onBack, onRegister }) {
     <Container initial="hidden" animate="visible" variants={containerVariants}>
       {isVerified ? (
         <VerifiedMessage>
-          <motion.div
+          <DivSVG
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
@@ -535,6 +541,7 @@ export default function VerificationCode({ onBack, onRegister }) {
                 fill="#433F66"
               />
               <path
+              className="HeartAnimation"
                 d="M113.203 186.348C112.793 184.188 112.044 182.114 110.871 180.242C108.725 176.817 105.211 174.266 101.283 173.285C97.3546 172.3 93.052 172.894 89.5387 174.9C88.2984 175.607 87.1303 176.52 86.3906 177.74C87.7933 179.292 89.4214 180.66 91.1848 181.772C92.3124 182.483 93.494 183.09 94.7072 183.626L94.7027 183.635C94.8335 187.401 97.729 190.542 97.8282 194.308C97.8778 196.275 97.6839 198.25 97.9139 200.208C98.1439 202.161 98.87 204.163 100.408 205.396C102.063 206.723 104.454 206.93 106.447 206.192C108.436 205.454 110.037 203.871 111.101 202.039C112.166 200.208 112.739 198.129 113.117 196.045C113.695 192.859 113.807 189.511 113.203 186.348Z"
                 fill="#C54140"
               />
@@ -609,7 +616,7 @@ export default function VerificationCode({ onBack, onRegister }) {
               </clipPath>
             </defs>
           </svg>
-          </motion.div>
+          </DivSVG>
           <h3>Registro Exitoso</h3>
           <TextP>
             Gracias por registrarte ahora hacer parte de esta comunidad,

@@ -11,20 +11,27 @@ const ContainerAnimation = styled(motion.div)`
   justify-content: center;
   align-items: center;
   position: relative;
+  @media(max-width:990px){
+    height:100%;
+  }
 `;
 
 const Card = styled.div`
   width: 100%;
-  height: 580px;
+  height:100vh;
   /* max-width: 400px; */
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border-radius: 40px 40px 0px 0px;
+  border-radius:0px;
   box-shadow: 0px -2px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 24px;
+  @media (max-width: 990px) {
+    border-radius: 40px 40px 0px 0px;
+    height: 580px;
+  }
 `;
 
 const DivTitulo = styled.div`

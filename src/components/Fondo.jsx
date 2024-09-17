@@ -14,6 +14,11 @@ const BackgroundContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 20px;
+
+  @media(max-width: 990px){
+    width: 226px;
+  }
+
 `;
 
 const LogoContainer = styled.div`
@@ -26,6 +31,7 @@ const LogoContainer = styled.div`
     width: ${(props) => props.$svgWidth || "100px"};  // Ancho pasado como prop
     height: ${(props) => props.$svgHeight || "100px"}; // Altura opcional si también quieres controlarla
   }
+
 `;
 const pathVariants = {
   hidden: {

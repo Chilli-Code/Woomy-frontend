@@ -7,13 +7,14 @@ import BackgroundWithLogo from "../components/Fondo.jsx";
 <Layout title="Welcome to Astro.">
   <div class="containerLogin">
     <BackgroundWithLogo
-    $width="226px"
+    $width="100%"
     $height="131px"
     $svgWidth="112px"
     $svgHeight="61px"
     $image="/img/LogoFondoSmall.png"
     client:only="react"
-  /><RegisterUser client:only="react" />
+  />
+  <RegisterUser client:only="react" />
 </div>
 </Layout>
 
@@ -23,8 +24,16 @@ import BackgroundWithLogo from "../components/Fondo.jsx";
   min-height: 100vh;
   background: #2563eb;
   display: flex;
-  flex-direction: column;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
 }
-    </style>
+
+@media  ( width < 990px){
+  .containerLogin{
+  flex-direction:column ;
+  }
+}
+
+
+</style>

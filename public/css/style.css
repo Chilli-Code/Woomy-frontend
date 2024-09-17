@@ -21,3 +21,105 @@
     --buttonBlueWidth: 320px;
     --buttonBlueHeight: 44px;
 }
+
+/* CALENDARIO */
+/* Estilos principales del DatePicker */
+.react-datepicker {
+    border: none !important;
+    box-shadow: none;
+    border:0px !important;
+  }
+  
+
+  .react-datepicker__header{
+    border-top-left-radius:0px !important;
+    border:none !important;
+    background-color: #ffff !important;
+  }
+  /* Botones de navegación anteriores */
+  .react-datepicker__navigation--previous {
+    left: 10px;
+    border: none;
+  }
+
+  .react-datepicker__navigation{
+    color: #282B2C !important;
+  }
+  
+  /* Botones de navegación siguientes */
+  .react-datepicker__navigation--next {
+    right: 10px;
+    border: none;
+  }
+  
+  /* Icono de flecha de los botones de navegación */
+  .react-datepicker__navigation-icon::before {
+    border-color: #000;
+    border-width: 2px 2px 0 0;
+    display: block;
+    height: 10px;
+    left: 5px;
+    position: relative;
+    top: -3px;
+    transform: rotate(-135deg);
+    width: 10px;
+  }
+  
+  /* Estilo del mes actual en la parte superior */
+  .react-datepicker__current-month {
+    background-color: #3669e8 !important;
+    color: white !important;
+    padding: 5px 10px !important;
+    width: 115.39px;
+    position: relative;
+    bottom:10px;
+    left: 30%;
+    border-radius: 20px !important;
+    font-size: 16px !important;
+    text-align: center !important;
+    margin-bottom: 10px !important;
+  }
+  
+  /* Días de la semana */
+  .react-datepicker__day-name {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #696b6b;
+  }
+  
+  /* Estilo de los días del calendario */
+  .react-datepicker__day {
+    width: 40px !important;
+    height: 40px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 2px !important;
+    font-size: 14px !important;
+    border-radius: 50% !important;
+    transition: background-color 0.2s !important;
+  }
+  
+  /* Día seleccionado */
+  .react-datepicker__day--selected {
+    background-color: #3669e8 !important;
+    color: white !important;
+    border-radius: 50% !important;
+  }
+  
+  /* Hover sobre los días del calendario */
+  .react-datepicker__day:hover {
+    background-color: #e6e6e6 !important;
+    border-radius: 50% !important;
+  }
+  
+  /* Hover sobre los días de la semana */
+  .react-datepicker__day-name:hover {
+    background-color: transparent;
+  }
+  
