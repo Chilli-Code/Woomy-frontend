@@ -146,7 +146,6 @@ export default function ModalUbi({ onSave }) {
         <Subtitle>
           Escribe o escoge una dirección donde se recogerá tu mascota
         </Subtitle>
-
         <div>
           <InputContainer>
             <IconWrapper>

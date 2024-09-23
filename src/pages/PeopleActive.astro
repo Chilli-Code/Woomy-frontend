@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PeopleActive from "../components/Home/PeopleActives.jsx";
+
+
+---
+<Layout title="Welcome to Astro.">
+<PeopleActive client:only="react"/>
+</Layout>

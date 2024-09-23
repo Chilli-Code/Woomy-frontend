@@ -16,16 +16,17 @@ const Container = styled.div`
 const Button = styled.button`
   width: 100%;
   padding: 10px;
-  background-color: #3669e8;
+  background-color: var(--BtnColorPrincipal);
   color: white;
   border: none;
   border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
   margin-top: 20px;
+  transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #265bbf;
+    background-color: var(--BtnColorPrincipalHover);
   }
 `;
 
@@ -60,7 +61,7 @@ const HourButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${(props) => (!props.disabled && !props.selected ? '#e6e6e6' : '')};
+    background-color: ${(props) => (!props.disabled && !props.selected ? '#e72020' : '')};
   }
 `;
 

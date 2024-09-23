@@ -13,12 +13,14 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  height:650px;
 `;
 
 const Button = styled.button`
   width: 100%;
   padding: 10px;
-  background-color: #3669e8;
+  background-color: ${(props) => (props.disabled ? '#2563eb' : '#3669e8')};
+  opacity: ${(props) => (props.disabled ? '0.3' : '1')};
   color: white;
   border: none;
   border-radius: 10px;
@@ -27,7 +29,7 @@ const Button = styled.button`
   margin-top: 20px;
 
   &:hover {
-    background-color: #265bbf;
+    background-color: ${(props) => (props.disabled ? '#2563eb' : '#265bbf')};
   }
 `;
 
@@ -59,7 +61,7 @@ const HourButton = styled.button`
   border: 1px solid ${(props) => (props.disabled ? '#ccc' : '#ccc')};
   border-radius: 5px;
   padding: 10px 15px;
-  margin: 5px;
+  height:40px;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   transition: background-color 0.3s ease;
 
@@ -163,6 +165,15 @@ const DivInfoGuia = styled.div`
 
 `;
 
+const DivContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    height: 100%;
+    /* padding: 20px; */
+`;
+
 export default function Calendar({ onSave }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedHour, setSelectedHour] = useState(null);
@@ -195,6 +206,7 @@ export default function Calendar({ onSave }) {
 
   return (
     <Container>
+      <DivContent>
       <Header>
         <h2>Seleccionar fecha y hora</h2>
         <Subtitle>Selecciona un fecha y la hora del paseo</Subtitle>
@@ -259,19 +271,23 @@ export default function Calendar({ onSave }) {
 
       {/* Selector de Hora */}
       <div style={{
-        display:"flex",
-        width:"100%",
-        overflowX:"auto",
+  display: "flex",
+  width: "100%",
+  overflowX: "auto",
+  whiteSpace: "nowrap",  // Evita que los botones pasen a una nueva línea
+  gap: "10px",           // Añade un espaciado entre los botones
+  padding: "10px 0", 
+  minHeight:"60px",
       }}>
         {availableHours.map((hour, index) => (
-          <HourButton
-            key={index}
-            onClick={() => handleHourClick(hour)}
-            selected={selectedHour === hour}
-          >
-            {hour}
-          </HourButton>
-        ))}
+            <HourButton
+              key={index}
+              onClick={() => handleHourClick(hour)}
+              selected={selectedHour === hour}
+            >
+              {hour}
+            </HourButton>
+          ))}
       </div>
 
       {/* Botones de acción */}
@@ -281,6 +297,7 @@ export default function Calendar({ onSave }) {
           Continuar
         </Button>
       </DibButtons>
+      </DivContent>
     </Container>
   );
 }

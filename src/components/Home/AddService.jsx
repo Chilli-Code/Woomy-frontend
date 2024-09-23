@@ -5,7 +5,8 @@ import DatePicker from "react-datepicker"; // Supongamos que usarás react-datep
 import "react-datepicker/dist/react-datepicker.css"; // Importar estilos para el calendario
 import { motion } from "framer-motion";
 import Calendar from "../ui/Calendar";
-import Recomendacion from "./Recomendacion";
+import Recomendacion from "./Recommendation";
+
 
 
 
@@ -96,6 +97,13 @@ const InfoLabel = styled.div`
     font-size: 16px;
     line-height: 24px;
   }
+  .bold{
+    font-weight: 500;
+    color: #696b6b;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
 `;
 
 const InfoText = styled.div`
@@ -194,7 +202,7 @@ const ModalOverlay = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: flex-end;
@@ -211,71 +219,96 @@ const ModalContent = styled(motion.div)`
   /* height: 407px; */
   max-width: 400px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  overflow-y:auto;
 `;
 
 
+const FloatingCloseButton = styled.button`
+  position: relative;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
 
+  &:hover {
+    color: #333;
+  }
+`;
 
 
   export default function RideService() {
     const [isModalVisible, setModalVisible] = useState(false);
-    const [modalContent, setModalContent] = useState("location"); // Control del contenido del modal
-    const [location, setLocation] = useState("Cll 41 # 21 - 31"); // Ubicación inicial
-    const [Recomendacion, setRecomendacion] = useState("Recomendacion"); // Ubicación inicial
-    const [selectedDate, setSelectedDate] = useState(null); // Fecha seleccionada
-    const [selectedHour, setSelectedHour] = useState(null);
-    const [selectedPeriod, setSelectedPeriod] = useState(""); // AM/PM seleccionado
-    const [isStep1Completed, setStep1Completed] = useState(false); // Paso 1 completado
-    const [isStep2Completed, setStep2Completed] = useState(false); // Paso 2 completado
-    const [isStep3Completed, setStep3Completed] = useState(false); // Paso 3 completado
-    
-    const openModalForLocation = () => {
-      setModalContent("location");
-      setModalVisible(true);
-    };
-    
-    const handleSaveLocation = (newLocation) => {
-      setLocation(newLocation);
-      setStep1Completed(true);
-      setModalVisible(false);
-    };
-    
-    const openModalForDate = () => {
-      setModalContent("date");
-      setModalVisible(true);
-    };
-    
-    
-    const handleSaveDate = ({ date, hour, period }) => {
-      setSelectedDate(date);  // Guardar la fecha seleccionada
-      setSelectedHour(hour);  // Guardar la hora seleccionada
-      setSelectedPeriod(period);  // Guardar AM/PM seleccionado
-      setStep2Completed(true);  // Marcar como completado el paso 2
-      setModalVisible(false);   // Cerrar el modal
-    };
-    
-    const openModalForStep3 = () => {
-      setModalContent("Recomendacion");
-      setModalVisible(true);
-    };
-    const handerSaveRecomds = (newRecomendacion) => {
-      setRecomendacion(newRecomendacion);
-      setStep3Completed(true);
-      setModalVisible(false);
-    };
-    
-    const stepsCompleted = [isStep1Completed, isStep2Completed, isStep3Completed].filter(Boolean).length;
-    const totalSteps = 3;
-    const progressPercentage = (stepsCompleted / totalSteps) * 100;
-    const isAllStepsCompleted = stepsCompleted === totalSteps;
-    const formattedDate = selectedDate instanceof Date && !isNaN(selectedDate)
-    ? selectedDate.toLocaleDateString("es-ES", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "Selecciona una fecha";
+  const [modalContent, setModalContent] = useState("location");
+  const [location, setLocation] = useState("Cll 41 # 21 - 31");
+  const [recomendacion, setRecomendation] = useState([]);
+  const [expanded, setExpanded] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedHour, setSelectedHour] = useState(null);
+  const [selectedPeriod, setSelectedPeriod] = useState("");
+  const [isStep1Completed, setStep1Completed] = useState(false);
+  const [isStep2Completed, setStep2Completed] = useState(false);
+  const [isStep3Completed, setStep3Completed] = useState(false);
 
+  const openModalForLocation = () => {
+    setModalContent("location");
+    setModalVisible(true);
+  };
+
+  const handleSaveLocation = (newLocation) => {
+    setLocation(newLocation);
+    setStep1Completed(true);
+    setModalVisible(false);
+  };
+
+  const openModalForDate = () => {
+    setModalContent("date");
+    setModalVisible(true);
+  };
+
+  const handleSaveDate = ({ date, hour, period }) => {
+    setSelectedDate(date);
+    setSelectedHour(hour);
+    setSelectedPeriod(period);
+    setStep2Completed(true);
+    setModalVisible(false);
+  };
+
+  const openModalForStep3 = () => {
+    setModalContent("Recomendacion");
+    setModalVisible(true);
+  };
+
+  const handerSaveRecomds = (newRecomendaciones) => {
+    setRecomendation([...newRecomendaciones]); // Guarda solo cuando el usuario confirma
+    setStep3Completed(true);
+    setModalVisible(false);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const stepsCompleted = [
+    isStep1Completed,
+    isStep2Completed,
+    isStep3Completed,
+  ].filter(Boolean).length;
+
+  const totalSteps = 3;
+  const progressPercentage = (stepsCompleted / totalSteps) * 100;
+  const isAllStepsCompleted = stepsCompleted === totalSteps;
+
+  const formattedDate =
+    selectedDate instanceof Date && !isNaN(selectedDate)
+      ? selectedDate.toLocaleDateString("es-ES", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        })
+      : "Selecciona una fecha";
 
   return (
     <Container>
@@ -340,7 +373,7 @@ const ModalContent = styled(motion.div)`
               <InfoText>
                 <span>Fecha y hora</span>
                 {isStep2Completed
-                ? `${formattedDate}, ${selectedHour} ${selectedPeriod}`
+                ? `${formattedDate} - ${selectedHour} ${selectedPeriod}`
                 : "Selecciona una fecha y hora"}
               </InfoText>
             </InfoLabel>
@@ -370,9 +403,15 @@ const ModalContent = styled(motion.div)`
                 />
               </svg>
               <InfoText>
-                <span>Datos de la mascota</span>
-                {Recomendacion}
-              </InfoText>
+                <span>Mascota</span>
+                {recomendacion.length > 0 ? (
+                recomendacion.map((_, index) => (
+                  <div key={index}>Item {index + 1}</div>
+                ))
+              ) : (
+                "Elige una, maximo 3"
+              )}
+                </InfoText>
             </InfoLabel>
             <Checkbox type="checkbox" checked={isStep3Completed} readOnly />
           </InfoItem>
@@ -389,18 +428,25 @@ const ModalContent = styled(motion.div)`
       </DivTareas>
 
       {isModalVisible && (
-        <ModalOverlay onClick={() => setModalVisible(false)}>
-          <ModalContent
-            onClick={(e) => e.stopPropagation()} // Detener la propagación del clic
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-          >
-            {modalContent === "location" && <ModalUbi onSave={handleSaveLocation} />}
-            {modalContent === "date" && <Calendar onSave={handleSaveDate} />}
-            {modalContent === "Recomendacion" && <Recomendacion onSave={handerSaveRecomds} />}
-          </ModalContent>
-        </ModalOverlay>
+       <ModalOverlay onClick={handleCloseModal}>
+       <ModalContent
+         onClick={(e) => e.stopPropagation()}
+         initial="hidden"
+         animate="visible"
+         variants={containerVariants}
+       >
+        <FloatingCloseButton onClick={handleCloseModal}>X</FloatingCloseButton>
+         {modalContent === "location" && <ModalUbi onSave={handleSaveLocation} />}
+         {modalContent === "date" && <Calendar onSave={handleSaveDate} />}
+         {modalContent === "Recomendacion" && (
+           <Recomendacion
+             onSave={handerSaveRecomds}
+             existingData={recomendacion}
+             onClose={handleCloseModal}
+           />
+         )}
+       </ModalContent>
+     </ModalOverlay>
       )}
     </Container>
   );
