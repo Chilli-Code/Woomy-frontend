@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css"; // Importar estilos para el
 import { motion } from "framer-motion";
 import Calendar from "../ui/Calendar";
 import Recomendacion from "./Recommendation";
+import {XCircle } from "react-feather";
 
 
 
@@ -222,20 +223,37 @@ const ModalContent = styled(motion.div)`
   overflow-y:auto;
 `;
 
+const ContainerButtonX = styled(motion.div)`
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    left: 50%;
+    display: flex;
+    z-index: 1111;
+    border-radius: 30px;
+    top: 20px;
+    font-size: 60px;
+    box-shadow:0px 0px 10px 0px #00000024;
+    color: #0f0;
+    text-align:center;
+    background: #3669e8;
+    align-items: center;
+    justify-content: center;
+    transition:0.5s;
 
-const FloatingCloseButton = styled.button`
+`;
+
+const FloatingXButton = styled.button`
   position: relative;
-  top: 10px;
-  right: 10px;
-  background-color: transparent;
   border: none;
-  font-size: 24px;
   cursor: pointer;
-  color: #666;
-
-  &:hover {
-    color: #333;
-  }
+  background:transparent;
+  color:#fff;
+  top:1.5px;
+  .iconX{
+    width:40px;
+    height:40px;
+    }
 `;
 
 
@@ -287,9 +305,10 @@ const FloatingCloseButton = styled.button`
     setModalVisible(false);
   };
 
-  const handleCloseModal = () => {
+  const handleXModal = () => {
     setModalVisible(false);
   };
+
 
   const stepsCompleted = [
     isStep1Completed,
@@ -428,21 +447,26 @@ const FloatingCloseButton = styled.button`
       </DivTareas>
 
       {isModalVisible && (
-       <ModalOverlay onClick={handleCloseModal}>
+       <ModalOverlay>
        <ModalContent
          onClick={(e) => e.stopPropagation()}
          initial="hidden"
          animate="visible"
          variants={containerVariants}
        >
-        <FloatingCloseButton onClick={handleCloseModal}>X</FloatingCloseButton>
+       <ContainerButtonX 
+        whileHover={{ scale: 1.2, rotate: 90 }}
+        whileTap={{ scale: 0.8, rotate: -90, borderRadius: "100%" }}
+       >
+        <FloatingXButton onClick={handleXModal}><XCircle className="iconX" /> </FloatingXButton>
+       </ContainerButtonX>
          {modalContent === "location" && <ModalUbi onSave={handleSaveLocation} />}
          {modalContent === "date" && <Calendar onSave={handleSaveDate} />}
          {modalContent === "Recomendacion" && (
            <Recomendacion
              onSave={handerSaveRecomds}
              existingData={recomendacion}
-             onClose={handleCloseModal}
+             onX={handleXModal}
            />
          )}
        </ModalContent>
