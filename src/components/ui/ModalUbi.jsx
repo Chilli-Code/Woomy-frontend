@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-import { Navigation, MapPin, ChevronRight, Home } from "react-feather";
+import { Navigation, MapPin, ChevronRight, Home, AlertTriangle, CheckCircle  } from "react-feather";
+import toast, { Toaster } from "react-hot-toast";
 
 // Styled Components
 const Container = styled.div`
@@ -146,13 +147,26 @@ const Circle = styled.div`
   gap: 15px;
   width: 152.5px;
   height: 100px;
+  cursor:pointer;
   border-radius: 20px;
-  border: 1px solid #3669e8;
+  border: 2px solid ${(props) => (props.isSelected ? "#3669E8" : "#d1d5db")};
   justify-content: center;
   align-items: center;
   flex-direction: column;
 `;
-
+const BackButton = styled.button`
+  background-color: #ccc; /* Botón Back con fondo gris */
+  color: #333;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-size: 16px;
+  &:hover {
+    background-color: #bbb;
+  }
+`;
 const TextoM = styled.p`
   font-size: 14px;
   line-height: 20px;
@@ -161,53 +175,191 @@ const TextoM = styled.p`
 `;
 
 export default function ModalUbi({ onSave }) {
-  const [inputValue, setInputValue] = useState(""); // Estado para el input
-  const [showCasaDetails, setShowCasaDetails] = useState(false); // Estado para mostrar los detalles de casa
-  const [showMainContent, setShowMainContent] = useState(true); // Estado para mostrar/ocultar el contenido principal
-  const [houseNumber, setHouseNumber] = useState("");
-  const [edificioNumber, setEdificioNumber] = useState("");
-  const [houseDetails, setHouseDetails] = useState("");
-  const [savedLocation, setSavedLocation] = useState("");
-  const [savedEdificio, setSavedEdificio] = useState("");
-  const [showEdificioInput, setShowEdificioInput] = useState(false); // Estado para mostrar input de Edificio
-
-  // Manejar clic en el círculo "Edificio"
-  const handleEdificioClick = () => {
-    setShowEdificioInput(true); // Mostrar input para Edificio
-  };
-  // Manejar cambios en el input
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  // Llamar a la función onSave y pasar el valor del input
-  const handleContinue = () => {
-    if (onSave) {
-      onSave(inputValue);
+  const [inputValue, setInputValue] = useState(""); // Estado para el input principal
+  const [houseNumber, setHouseNumber] = useState(""); // Input de número de casa
+  const [edificioNumber, setEdificioNumber] = useState(""); // Input de número de torre
+  const [houseDetails, setHouseDetails] = useState(""); // Input de detalles de casa
+  const [savedLocation, setSavedLocation] = useState(""); // Almacena la ubicación guardada (casa o edificio)
+  const [selectedLocationType, setSelectedLocationType] = useState(""); // Para determinar si es casa o edificio
+  const [isLocationSelected, setIsLocationSelected] = useState(false); // Controla si se muestra el formulario de detalles
+  
+  //ALERTAS
+  const [emptyToastCount, setEmptyToastCount] = useState(0);
+  const notifyInputEmpty = () => {
+    if (emptyToastCount < 5) {
+      toast.error("Por favor, ingresa una ubicación o selecciona Casa/Edificio.", {
+      });
+      
+      // Aumentar el contador de toasts de input vacío
+      setEmptyToastCount(emptyToastCount + 1);
+    } else {
+      // Resetear el contador después de mostrar 5 veces
+      setEmptyToastCount(0);
     }
   };
 
-  // Handle clicking on Casa
-  const handleCasaClick = () => {
-    setShowMainContent(false); // Ocultar contenido principal
-    setShowCasaDetails(true); // Mostrar inputs de Casa
+  const [toastCount, setToastCount] = useState(0);
+  const opcionFull = () => {
+  if (toastCount < 3) {
+    toast((t) => (
+      <span>
+        Solo puedes escoger una opción
+      </span>
+    ), {
+      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+    });
+    
+    // Aumentar el contador de toasts
+    setToastCount(toastCount + 1);
+  } else {
+    // Resetear el contador después de mostrar 5 veces
+    setToastCount(0);
+  }
+};
+
+const [toastHouse, setHouse] = useState(0);
+const inputHouse = () => {
+  if (toastHouse < 3) {
+    toast((t) => (
+      <span>
+       Por favor Llenar la informacion
+      </span>
+    ), {
+      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+    });
+    
+    // Aumentar el contador de toasts
+    setHouse(toastHouse + 1);
+  } else {
+    // Resetear el contador después de mostrar 5 veces
+    setHouse(0);
+  }
+};
+
+
+const [toastBuilding, setBuilding] = useState(0);
+const inputBuilding = () => {
+  if (toastBuilding < 3) {
+    toast((t) => (
+      <span>
+        Por favor llenar completar la infomacion
+      </span>
+    ), {
+      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+    });
+    
+    // Aumentar el contador de toasts
+    setBuilding(toastBuilding + 1);
+  } else {
+    // Resetear el contador después de mostrar 5 veces
+    setBuilding(0);
+  }
+};
+
+const [edificioEmpy, setEdificioEmpy] = useState(0);
+const buildingEmpy = () => {
+  if (edificioEmpy < 3) {
+    toast((t) => (
+      <span>
+       Solo puedes escoger una opción
+      </span>
+    ), {
+      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+    });
+    
+    // Aumentar el contador de toasts
+    setEdificioEmpy(edificioEmpy + 1);
+  } else {
+    // Resetear el contador después de mostrar 5 veces
+    setEdificioEmpy(0);
+  }
+};
+
+
+
+
+  // Función para continuar y validar si los inputs están completos
+  const handleContinue = () => {
+    if (!inputValue.trim() && !savedLocation) { // Verificar si no se ha ingresado nada
+      notifyInputEmpty();
+      return;
+    }
+
+    if (onSave) {
+      onSave(savedLocation || inputValue); // Guardar ubicación manual o seleccionada
+
+      // Mostrar toast de éxito al guardar la ubicación
+      toast.success("Ubicación agregada", {
+        icon: <CheckCircle color="#4BB543" />, // Ícono personalizado de éxito
+      });
+    }
   };
 
-  // Guardar la ubicación de Casa y mostrarla
-  const handleSaveCasaDetails = () => {
-    const location = `Casa: ${houseNumber}, ${houseDetails}`;
-    const locationE = `Edificio: ${edificioNumber}, ${houseDetails}`;
-    setSavedLocation(location);
-    setSavedEdificio(locationE);
-    
-    setShowCasaDetails(false); // Ocultar inputs de Casa
-    setShowMainContent(true); // Mostrar contenido principal de nuevo
+  // Función para manejar la escritura en el input principal y verificar si ya se seleccionó "Casa" o "Edificio"
+  const handleInputChange = (e) => {
+    if (savedLocation) {
+      opcionFull();
+      return;
+    }
+    setInputValue(e.target.value);
+  };
+
+  // Manejar clic en el círculo "Edificio" y validar si ya hay una ubicación manual ingresada
+  const handleEdificioClick = () => {
+    if (inputValue) {
+      buildingEmpy();
+      return;
+    }
+    setSelectedLocationType("Edificio");
+    setIsLocationSelected(true); // Mostrar inputs de detalles
+    setHouseNumber(""); // Limpiar los campos de casa cuando se selecciona Edificio
+    setHouseDetails(""); // Limpiar los campos de detalles de casa
+  };
+
+  // Manejar clic en el círculo "Casa" y validar si ya hay una ubicación manual ingresada
+  const handleCasaClick = () => {
+    if (inputValue) {
+      buildingEmpy();
+      return;
+    }
+    setSelectedLocationType("Casa");
+    setIsLocationSelected(true); // Mostrar inputs de detalles
+    setEdificioNumber(""); // Limpiar los campos de edificio cuando se selecciona Casa
+  };
+
+  // Botón Back para regresar al primer formulario
+  const handleBackClick = () => {
+    setIsLocationSelected(false); // Regresar al formulario principal
+  };
+
+  // Guardar la ubicación seleccionada
+  const handleSaveLocationDetails = () => {
+    if (selectedLocationType === "Casa") {
+      if (houseNumber && houseDetails) { // Solo guarda si ambos campos están completos
+        const location = `Casa: ${houseNumber}, ${houseDetails}`;
+        setSavedLocation(location);
+      } else {
+        inputHouse();
+        return;
+      }
+    } else if (selectedLocationType === "Edificio") {
+      if (edificioNumber) { // Solo guarda si el campo de número de torre está completo
+        const locationE = `Edificio: Torre ${edificioNumber}`;
+        setSavedLocation(locationE);
+      } else {
+        inputBuilding();
+        return;
+      }
+    }
+
+    setIsLocationSelected(false); // Volver al formulario principal después de guardar
   };
 
   return (
     <Container>
+      <Toaster position="top-center" reverseOrder={false} />
       <Card>
-        {showMainContent && (
+        {!isLocationSelected && (
           <>
             <Title>Ubicación de recogida</Title>
             <Subtitle>
@@ -221,12 +373,12 @@ export default function ModalUbi({ onSave }) {
                 <Input
                   type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
+                  onChange={handleInputChange}
                   placeholder="Escribe tu ubicación"
                 />
               </InputContainer>
 
-              <LocationItem>
+              <LocationItem >
                 <LocationInfo>
                   <IconWrapper>
                     <Navigation />
@@ -260,15 +412,16 @@ export default function ModalUbi({ onSave }) {
           </>
         )}
 
-        {showCasaDetails && (
+        {isLocationSelected && (
           <CasaDetailsContainer>
+            <BackButton onClick={handleBackClick}>Back</BackButton> {/* Botón Back */}
             <Title>Detalles de la ubicación</Title>
             <Subtitle>
               Escribe los detalles de tu ubicación para facilidad de llegada del
               paseador
             </Subtitle>
             <ContainerSvg>
-              <Circle>
+            <Circle onClick={handleCasaClick} isSelected={selectedLocationType === "Casa"}>
                 <svg
                   width="38"
                   height="38"
@@ -295,7 +448,7 @@ export default function ModalUbi({ onSave }) {
                 </svg>
                 <TextoM>Casa</TextoM>
               </Circle>
-              <Circle onClick={handleEdificioClick}>
+              <Circle onClick={handleEdificioClick} isSelected={selectedLocationType === "Edificio"}>
                 <svg
                   width="38"
                   height="38"
@@ -323,38 +476,44 @@ export default function ModalUbi({ onSave }) {
                 <TextoM>Edificio</TextoM>
               </Circle>
             </ContainerSvg>
-            {showEdificioInput && (
-  <InputContainer>
-    <Input
-      type="text"
-      placeholder="Número de la torre"
-      value={edificioNumber}
-      onChange={(e) => setEdificioNumber(e.target.value)}
-    />
-  </InputContainer>
-)}  
-            <InputContainer>
-              <Input
-                type="text"
-                placeholder="Número de la casa"
-                value={houseNumber}
-                onChange={(e) => setHouseNumber(e.target.value)}
-              />
-            </InputContainer>
-            <InputContainer>
-              <Input
-                type="text"
-                placeholder="Detalles de la casa"
-                value={houseDetails}
-                onChange={(e) => setHouseDetails(e.target.value)}
-              />
-            </InputContainer>
+            {/* Inputs para Edificio */}
+            {selectedLocationType === "Edificio" && (
+              <InputContainer>
+                <Input
+                  type="text"
+                  placeholder="Número de la torre"
+                  value={edificioNumber}
+                  onChange={(e) => setEdificioNumber(e.target.value)}
+                />
+              </InputContainer>
+            )}
+
+           {selectedLocationType === "Casa" && (
+              <>
+                <InputContainer>
+                  <Input
+                    type="text"
+                    placeholder="Número de la casa"
+                    value={houseNumber}
+                    onChange={(e) => setHouseNumber(e.target.value)}
+                  />
+                </InputContainer>
+                <InputContainer>
+                  <Input
+                    type="text"
+                    placeholder="Detalles de la casa"
+                    value={houseDetails}
+                    onChange={(e) => setHouseDetails(e.target.value)}
+                  />
+                </InputContainer>
+              </>
+            )}
+
             <DivButton>
-              <Button onClick={handleSaveCasaDetails}>Guardar</Button>
+              <Button onClick={handleSaveLocationDetails}>Guardar</Button>
             </DivButton>
           </CasaDetailsContainer>
         )}
-
       </Card>
     </Container>
   );
