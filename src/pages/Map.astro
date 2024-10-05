@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MapComponent  from '../components/ui/Map';
+// import { TravelProvider } from '../components/ui/TravelContext.jsx';
+import HelpCenter  from '../components/ui/InfoMap';
+---
+
+<Layout title="Welcome to Astro.">
+      <div class="containerLogin">
+      <MapComponent client:only="react" />
+      <!-- <HelpCenter  client:only="react" /> -->
+
+
+	</div>
+  </Layout>
+  

@@ -196,7 +196,7 @@ const Header = styled.header`
                 </DropdownIcon>
               </LocationInfo>
             </LocationContainer>
-          <SettingsButton>
+          <SettingsButton onClick={() => (window.location.href = "/Setting")}>
             <Settings className="w-6 h-6" />
           </SettingsButton>
         </Header>

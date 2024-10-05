@@ -1,0 +1,9 @@
+---
+import Settings from "../components/Home/Setting";
+import Layout from '../layouts/Layout.astro';
+
+---
+<Layout title="Welcome to Astro.">
+<Settings client:only="react" />
+
+</Layout>

@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-import { Navigation, MapPin, ChevronRight, Home, AlertTriangle, CheckCircle  } from "react-feather";
+import {
+  Navigation,
+  MapPin,
+  ChevronRight,
+  Home,
+  AlertTriangle,
+  CheckCircle,
+  ArrowLeft,
+} from "react-feather";
 import toast, { Toaster } from "react-hot-toast";
 
 // Styled Components
@@ -144,10 +152,11 @@ const ContainerSvg = styled.div`
 
 const Circle = styled.div`
   display: flex;
-  gap: 15px;
+  gap: 8px;
   width: 152.5px;
   height: 100px;
-  cursor:pointer;
+  cursor: pointer;
+  background:  ${(props) => (props.isSelected ? "#3669E81A" : "transparent")} ;
   border-radius: 20px;
   border: 2px solid ${(props) => (props.isSelected ? "#3669E8" : "#d1d5db")};
   justify-content: center;
@@ -155,16 +164,16 @@ const Circle = styled.div`
   flex-direction: column;
 `;
 const BackButton = styled.button`
-  background-color: #ccc; /* Botón Back con fondo gris */
+  background-color: #cccccc14; /* Botón Back con fondo gris */
   color: #333;
-  padding: 10px;
+  padding: 5px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 10px;
   font-size: 16px;
+  transition: 0.3s;
   &:hover {
-    background-color: #bbb;
+    transform: scale(1.03);
   }
 `;
 const TextoM = styled.p`
@@ -182,14 +191,12 @@ export default function ModalUbi({ onSave }) {
   const [savedLocation, setSavedLocation] = useState(""); // Almacena la ubicación guardada (casa o edificio)
   const [selectedLocationType, setSelectedLocationType] = useState(""); // Para determinar si es casa o edificio
   const [isLocationSelected, setIsLocationSelected] = useState(false); // Controla si se muestra el formulario de detalles
-  
+
   //ALERTAS
   const [emptyToastCount, setEmptyToastCount] = useState(0);
   const notifyInputEmpty = () => {
     if (emptyToastCount < 5) {
-      toast.error("Por favor, ingresa una ubicación o selecciona Casa/Edificio.", {
-      });
-      
+      toast.error("Por favor, ingresa una opcion", {});
       // Aumentar el contador de toasts de input vacío
       setEmptyToastCount(emptyToastCount + 1);
     } else {
@@ -200,87 +207,68 @@ export default function ModalUbi({ onSave }) {
 
   const [toastCount, setToastCount] = useState(0);
   const opcionFull = () => {
-  if (toastCount < 3) {
-    toast((t) => (
-      <span>
-        Solo puedes escoger una opción
-      </span>
-    ), {
-      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
-    });
-    
-    // Aumentar el contador de toasts
-    setToastCount(toastCount + 1);
-  } else {
-    // Resetear el contador después de mostrar 5 veces
-    setToastCount(0);
-  }
-};
+    if (toastCount < 3) {
+      toast((t) => <span>Solo puedes escoger una opción</span>, {
+        icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+      });
 
-const [toastHouse, setHouse] = useState(0);
-const inputHouse = () => {
-  if (toastHouse < 3) {
-    toast((t) => (
-      <span>
-       Por favor Llenar la informacion
-      </span>
-    ), {
-      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
-    });
-    
-    // Aumentar el contador de toasts
-    setHouse(toastHouse + 1);
-  } else {
-    // Resetear el contador después de mostrar 5 veces
-    setHouse(0);
-  }
-};
+      // Aumentar el contador de toasts
+      setToastCount(toastCount + 1);
+    } else {
+      // Resetear el contador después de mostrar 5 veces
+      setToastCount(0);
+    }
+  };
 
+  const [toastHouse, setHouse] = useState(0);
+  const inputHouse = () => {
+    if (toastHouse < 3) {
+      toast((t) => <span>Por favor llenar completar la infomacion</span>, {
+        icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+      });
 
-const [toastBuilding, setBuilding] = useState(0);
-const inputBuilding = () => {
-  if (toastBuilding < 3) {
-    toast((t) => (
-      <span>
-        Por favor llenar completar la infomacion
-      </span>
-    ), {
-      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
-    });
-    
-    // Aumentar el contador de toasts
-    setBuilding(toastBuilding + 1);
-  } else {
-    // Resetear el contador después de mostrar 5 veces
-    setBuilding(0);
-  }
-};
+      // Aumentar el contador de toasts
+      setHouse(toastHouse + 1);
+    } else {
+      // Resetear el contador después de mostrar 5 veces
+      setHouse(0);
+    }
+  };
 
-const [edificioEmpy, setEdificioEmpy] = useState(0);
-const buildingEmpy = () => {
-  if (edificioEmpy < 3) {
-    toast((t) => (
-      <span>
-       Solo puedes escoger una opción
-      </span>
-    ), {
-      icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
-    });
-    
-    // Aumentar el contador de toasts
-    setEdificioEmpy(edificioEmpy + 1);
-  } else {
-    // Resetear el contador después de mostrar 5 veces
-    setEdificioEmpy(0);
-  }
-};
+  const [toastBuilding, setBuilding] = useState(0);
+  const inputBuilding = () => {
+    if (toastBuilding < 3) {
+      toast((t) => <span>Por favor llenar completar la infomacion</span>, {
+        icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+      });
 
+      // Aumentar el contador de toasts
+      setBuilding(toastBuilding + 1);
+    } else {
+      // Resetear el contador después de mostrar 5 veces
+      setBuilding(0);
+    }
+  };
 
+  const [edificioEmpy, setEdificioEmpy] = useState(0);
+  const buildingEmpy = () => {
+    if (edificioEmpy < 3) {
+      toast((t) => <span>Solo puedes escoger una opción</span>, {
+        icon: <AlertTriangle color="#c1c126f0" />, // Ícono personalizado
+      });
 
+      // Aumentar el contador de toasts
+      setEdificioEmpy(edificioEmpy + 1);
+    } else {
+      // Resetear el contador después de mostrar 5 veces
+      setEdificioEmpy(0);
+    }
+  };
 
   // Función para continuar y validar si los inputs están completos
   const handleContinue = () => {
-    if (!inputValue.trim() && !savedLocation) { // Verificar si no se ha ingresado nada
+    if (!inputValue.trim() && !savedLocation) {
+      // Verificar si no se ha ingresado nada
       notifyInputEmpty();
       return;
     }
@@ -335,26 +323,39 @@ const buildingEmpy = () => {
   // Guardar la ubicación seleccionada
   const handleSaveLocationDetails = () => {
     if (selectedLocationType === "Casa") {
-      if (houseNumber && houseDetails) { // Solo guarda si ambos campos están completos
-        const location = `Casa: ${houseNumber}, ${houseDetails}`;
-        setSavedLocation(location);
+      if (houseNumber && houseDetails) {
+        const location = {
+          locationType: "Casa",
+          houseNumber: houseNumber,
+          houseDetails: houseDetails,
+        };
+        setSavedLocation(location);  // Guardar la ubicación de la casa
+        onSave(location);  // Asegúrate de que se está pasando el objeto correcto
       } else {
-        inputHouse();
+        inputHouse();  // Mostrar mensaje si faltan datos
         return;
       }
     } else if (selectedLocationType === "Edificio") {
-      if (edificioNumber) { // Solo guarda si el campo de número de torre está completo
-        const locationE = `Edificio: Torre ${edificioNumber}`;
-        setSavedLocation(locationE);
+      if (edificioNumber) {
+        const location = {
+          locationType: "Edificio",
+          edificioNumber: edificioNumber,
+        };
+        setSavedLocation(location);  // Guardar la ubicación del edificio
+        onSave(location);  // Asegúrate de que se está pasando el objeto correcto
       } else {
-        inputBuilding();
+        inputBuilding();  // Mostrar mensaje si faltan datos
         return;
       }
+    } else {
+      alert("Por favor, selecciona una opción.");  // Si no ha seleccionado nada
+      return;
     }
-
-    setIsLocationSelected(false); // Volver al formulario principal después de guardar
+  
+    // Regresar al formulario principal después de guardar
+    setIsLocationSelected(false);
   };
-
+  
   return (
     <Container>
       <Toaster position="top-center" reverseOrder={false} />
@@ -378,7 +379,7 @@ const buildingEmpy = () => {
                 />
               </InputContainer>
 
-              <LocationItem >
+              <LocationItem>
                 <LocationInfo>
                   <IconWrapper>
                     <Navigation />
@@ -396,8 +397,32 @@ const buildingEmpy = () => {
                     <Home />
                   </IconWrapper>
                   <LocationDetails>
-                    <LocationTitle>{savedLocation || "Casa"}</LocationTitle>
-                    <LocationAddress>Cll 74 # 41 - 21</LocationAddress>
+                    {/* Aquí se cambia el texto dependiendo de la opción seleccionada */}
+                    <LocationTitle>
+                      {selectedLocationType === "Casa" ? "Casa" : "Edificio"}
+                    </LocationTitle>
+                    <LocationAddress>
+                      {/* Mostrar la dirección dependiendo de la selección y los inputs */}
+                      {selectedLocationType === "Casa" ? (
+                        houseNumber || houseDetails ? (
+                          <>
+                            {houseNumber}
+                            <br />
+                            {houseDetails}
+                          </>
+                        ) : (
+                          "Escribe los detalles de tu casa"
+                        )
+                      ) : selectedLocationType === "Edificio" ? (
+                        edificioNumber ? (
+                          <>Torre {edificioNumber}</>
+                        ) : (
+                          "Escribe los detalles del edificio"
+                        )
+                      ) : (
+                        "Cll 74 # 41 - 21"
+                      )}
+                    </LocationAddress>
                   </LocationDetails>
                 </LocationInfo>
                 <IconWrapper>
@@ -414,14 +439,22 @@ const buildingEmpy = () => {
 
         {isLocationSelected && (
           <CasaDetailsContainer>
-            <BackButton onClick={handleBackClick}>Back</BackButton> {/* Botón Back */}
+            <div>
+              <BackButton onClick={handleBackClick}>
+                <ArrowLeft />
+              </BackButton>{" "}
+              {/* Botón Back */}
+            </div>
             <Title>Detalles de la ubicación</Title>
             <Subtitle>
               Escribe los detalles de tu ubicación para facilidad de llegada del
               paseador
             </Subtitle>
             <ContainerSvg>
-            <Circle onClick={handleCasaClick} isSelected={selectedLocationType === "Casa"}>
+              <Circle
+                onClick={handleCasaClick}
+                isSelected={selectedLocationType === "Casa"}
+              >
                 <svg
                   width="38"
                   height="38"
@@ -448,7 +481,10 @@ const buildingEmpy = () => {
                 </svg>
                 <TextoM>Casa</TextoM>
               </Circle>
-              <Circle onClick={handleEdificioClick} isSelected={selectedLocationType === "Edificio"}>
+              <Circle
+                onClick={handleEdificioClick}
+                isSelected={selectedLocationType === "Edificio"}
+              >
                 <svg
                   width="38"
                   height="38"
@@ -488,7 +524,7 @@ const buildingEmpy = () => {
               </InputContainer>
             )}
 
-           {selectedLocationType === "Casa" && (
+            {selectedLocationType === "Casa" && (
               <>
                 <InputContainer>
                   <Input

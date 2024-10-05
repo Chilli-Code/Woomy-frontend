@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ModalUbi from "../ui/ModalUbi";
-import DatePicker from "react-datepicker"; // Supongamos que usarás react-datepicker
+import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css"; // Importar estilos para el calendario
 import { motion } from "framer-motion";
 import Calendar from "../ui/Calendar";
 import Recomendacion from "./Recommendation";
 import {XCircle } from "react-feather";
-
+import SearchComponent from "../ui/Loader";
 
 
 
@@ -111,6 +111,7 @@ const InfoText = styled.div`
   font-size: 14px;
   color: #282b2c;
   display: flex;
+  white-space: pre-line;
   flex-direction: column;
 `;
 
@@ -269,6 +270,7 @@ const FloatingXButton = styled.button`
   const [isStep1Completed, setStep1Completed] = useState(false);
   const [isStep2Completed, setStep2Completed] = useState(false);
   const [isStep3Completed, setStep3Completed] = useState(false);
+  const [showSearchComponent, setShowSearchComponent] = useState(false);
 
   const openModalForLocation = () => {
     setModalContent("location");
@@ -276,11 +278,12 @@ const FloatingXButton = styled.button`
   };
 
   const handleSaveLocation = (newLocation) => {
+    console.log("Nueva ubicación guardada:", newLocation);  // Agrega este console.log para verificar los datos
     setLocation(newLocation);
     setStep1Completed(true);
     setModalVisible(false);
   };
-
+  
   const openModalForDate = () => {
     setModalContent("date");
     setModalVisible(true);
@@ -307,6 +310,7 @@ const FloatingXButton = styled.button`
 
   const handleXModal = () => {
     setModalVisible(false);
+    setShowSearchComponent(false); 
   };
 
 
@@ -320,6 +324,31 @@ const FloatingXButton = styled.button`
   const progressPercentage = (stepsCompleted / totalSteps) * 100;
   const isAllStepsCompleted = stepsCompleted === totalSteps;
 
+
+  
+const handleSubmit = () => {
+  if (isAllStepsCompleted) {
+    const taskData = {
+      location: location,   // Ubicación
+      date: selectedDate?.toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      }),  // Fecha
+      time: `${selectedHour} ${selectedPeriod}`,  // Hora
+      recommendations: recomendacion,  // Recomendaciones
+    };
+
+    console.log("Tareas completadas en JSON:", JSON.stringify(taskData, null, 2)); // Muestra el JSON en consola
+
+    setShowSearchComponent(true); // Cambia el estado para mostrar SearchComponent
+    setModalVisible(true);
+    setTimeout(() => {
+      // Redirigir a la página PeopleActive.astro cuando termina la búsqueda
+      window.location.href = "/PeopleActive"; // Ruta a tu página .astro
+    }, 3000);  // Mantiene la modal visible
+  }
+};
   const formattedDate =
     selectedDate instanceof Date && !isNaN(selectedDate)
       ? selectedDate.toLocaleDateString("es-ES", {
@@ -342,31 +371,60 @@ const FloatingXButton = styled.button`
         </div>
         <Title>Información para solicitud</Title>
         <InfoList>
-          <InfoItem onClick={openModalForLocation}>
-            <InfoLabel>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="65"
-                height="65"
-                viewBox="0 0 43 65"
-                fill="none"
-              >
-                <path
-                  d="M7.51955 39.6726C12.4198 48.7939 18.6745 57.048 21.0182 57.048C25.0989 57.048 41.0364 32.0261 41.0364 20.9704C41.0364 9.91465 32.0739 0.952148 21.0182 0.952148C9.96251 0.952148 1 9.91465 1 20.9704C1 24.7623 2.87522 30.1974 5.50366 35.7026M30.4331 51.2447C29.5698 51.0022 28.6494 50.7915 27.682 50.6187M35.7715 53.6707C37.1007 54.6725 37.8573 55.8225 37.8573 57.0478C37.8573 60.9134 30.3188 64.0478 21.0182 64.0478C11.7177 64.0478 4.17917 60.9134 4.17917 57.0478C4.17917 54.1658 8.36863 51.6915 14.3545 50.6187M30.1799 10.2551C27.7158 8.14611 24.516 6.87188 21.0182 6.87188C13.2318 6.87188 6.91971 13.1839 6.91971 20.9703C6.91971 28.7566 13.2318 35.0688 21.0182 35.0688C28.8046 35.0688 35.1168 28.7566 35.1168 20.9703C35.1168 18.2894 34.3684 15.7834 33.0693 13.6494M15.5385 25.8109C15.6451 27.3307 16.8524 28.5193 18.3735 28.6046C18.8109 28.629 19.2293 28.5602 19.6109 28.4161C20.5201 28.0728 21.5164 28.0728 22.4255 28.4161C22.8071 28.5602 23.2256 28.629 23.663 28.6046C25.1842 28.5193 26.3913 27.3307 26.4979 25.8109C26.5625 24.8895 26.2129 24.0487 25.6166 23.4554L23.8668 21.6656C22.304 20.0673 19.7324 20.0673 18.1698 21.6656C16.3858 23.4902 16.4168 23.4539 16.42 23.4554C15.8237 24.0487 15.4739 24.8895 15.5385 25.8109ZM14.4571 18.871C15.0784 19.9471 14.924 21.1993 14.1123 21.6679C13.3007 22.1366 12.1389 21.6442 11.5177 20.568C10.8964 19.4919 11.0507 18.2397 11.8624 17.7711C12.6742 17.3025 13.8358 17.7948 14.4571 18.871ZM19.6637 15.0374C20.0243 16.3832 19.4937 17.6948 18.4786 17.9667C17.4634 18.2387 16.3482 17.3681 15.9876 16.0224C15.6269 14.6766 16.1576 13.365 17.1727 13.0931C18.1878 12.821 19.3031 13.6915 19.6637 15.0374ZM27.5794 18.871C26.9581 19.9471 27.1124 21.1993 27.9242 21.6679C28.7358 22.1366 29.8975 21.6442 30.5187 20.568C31.14 19.4919 30.9857 18.2397 30.1739 17.7711C29.3623 17.3025 28.2007 17.7948 27.5794 18.871ZM22.3728 15.0374C22.0121 16.3832 22.5428 17.6948 23.5579 17.9667C24.573 18.2387 25.6883 17.3681 26.0489 16.0224C26.4095 14.6766 25.8789 13.365 24.8638 13.0931C23.8486 12.821 22.7335 13.6915 22.3728 15.0374Z"
-                  stroke="#3669E8"
-                  strokeWidth="2"
-                  strokeMiterlimit="10"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <InfoText>
-                <span>Ubicación</span>
-                {location}
-              </InfoText>
-            </InfoLabel>
-            <Checkbox type="checkbox" checked={isStep1Completed} readOnly />
-          </InfoItem>
+        <InfoItem onClick={openModalForLocation}>
+  <InfoLabel>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="65"
+      height="65"
+      viewBox="0 0 43 65"
+      fill="none"
+    >
+      <path
+        d="M7.51955 39.6726C12.4198 48.7939 18.6745 57.048 21.0182 57.048C25.0989 57.048 41.0364 32.0261 41.0364 20.9704C41.0364 9.91465 32.0739 0.952148 21.0182 0.952148C9.96251 0.952148 1 9.91465 1 20.9704C1 24.7623 2.87522 30.1974 5.50366 35.7026M30.4331 51.2447C29.5698 51.0022 28.6494 50.7915 27.682 50.6187M35.7715 53.6707C37.1007 54.6725 37.8573 55.8225 37.8573 57.0478C37.8573 60.9134 30.3188 64.0478 21.0182 64.0478C11.7177 64.0478 4.17917 60.9134 4.17917 57.0478C4.17917 54.1658 8.36863 51.6915 14.3545 50.6187M30.1799 10.2551C27.7158 8.14611 24.516 6.87188 21.0182 6.87188C13.2318 6.87188 6.91971 13.1839 6.91971 20.9703C6.91971 28.7566 13.2318 35.0688 21.0182 35.0688C28.8046 35.0688 35.1168 28.7566 35.1168 20.9703C35.1168 18.2894 34.3684 15.7834 33.0693 13.6494M15.5385 25.8109C15.6451 27.3307 16.8524 28.5193 18.3735 28.6046C18.8109 28.629 19.2293 28.5602 19.6109 28.4161C20.5201 28.0728 21.5164 28.0728 22.4255 28.4161C22.8071 28.5602 23.2256 28.629 23.663 28.6046C25.1842 28.5193 26.3913 27.3307 26.4979 25.8109C26.5625 24.8895 26.2129 24.0487 25.6166 23.4554L23.8668 21.6656C22.304 20.0673 19.7324 20.0673 18.1698 21.6656C16.3858 23.4902 16.4168 23.4539 16.42 23.4554C15.8237 24.0487 15.4739 24.8895 15.5385 25.8109ZM14.4571 18.871C15.0784 19.9471 14.924 21.1993 14.1123 21.6679C13.3007 22.1366 12.1389 21.6442 11.5177 20.568C10.8964 19.4919 11.0507 18.2397 11.8624 17.7711C12.6742 17.3025 13.8358 17.7948 14.4571 18.871ZM19.6637 15.0374C20.0243 16.3832 19.4937 17.6948 18.4786 17.9667C17.4634 18.2387 16.3482 17.3681 15.9876 16.0224C15.6269 14.6766 16.1576 13.365 17.1727 13.0931C18.1878 12.821 19.3031 13.6915 19.6637 15.0374ZM27.5794 18.871C26.9581 19.9471 27.1124 21.1993 27.9242 21.6679C28.7358 22.1366 29.8975 21.6442 30.5187 20.568C31.14 19.4919 30.9857 18.2397 30.1739 17.7711C29.3623 17.3025 28.2007 17.7948 27.5794 18.871ZM22.3728 15.0374C22.0121 16.3832 22.5428 17.6948 23.5579 17.9667C24.573 18.2387 25.6883 17.3681 26.0489 16.0224C26.4095 14.6766 25.8789 13.365 24.8638 13.0931C23.8486 12.821 22.7335 13.6915 22.3728 15.0374Z"
+        stroke="#3669E8"
+        strokeWidth="2"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+
+    <InfoText>
+  <span>Ubicación</span>
+  <div
+    style={{
+      height: "100%",
+      width: "200px",
+      overflowY: "auto",
+      display: "flex",
+      flexDirection: "column",
+      whiteSpace: "pre-line",
+    }}
+  >
+
+  {location && location.locationType === "Casa" && location.houseNumber && location.houseDetails ? (
+    `Número de la casa: ${location.houseNumber}, Detalles: ${location.houseDetails}`
+  ) : location && location.locationType === "Edificio" && location.edificioNumber ? (
+    `Edificio: ${location.edificioNumber}`
+  ) : typeof location === 'string' ? (
+    location
+  ) : (
+    "No se ha especificado la ubicación"
+  )}
+
+
+  </div>
+</InfoText>
+
+
+
+
+
+  </InfoLabel>
+  <Checkbox type="checkbox" checked={isStep1Completed} readOnly />
+</InfoItem>
+
 
           <InfoItem
             disabled={!isStep1Completed}
@@ -440,38 +498,47 @@ const FloatingXButton = styled.button`
           <CancelButton onClick={() => (window.location.href = "/Home")}>
             Cancelar
           </CancelButton>
-          <SubmitButton disabled={!isAllStepsCompleted}>
+          <SubmitButton disabled={!isAllStepsCompleted} onClick={handleSubmit}>
             Buscar paseador
           </SubmitButton>
         </ButtonContainer>
       </DivTareas>
-
       {isModalVisible && (
-       <ModalOverlay>
-       <ModalContent
-         onClick={(e) => e.stopPropagation()}
-         initial="hidden"
-         animate="visible"
-         variants={containerVariants}
-       >
-       <ContainerButtonX 
-        whileHover={{ scale: 1.2, rotate: 90 }}
-        whileTap={{ scale: 0.8, rotate: -90, borderRadius: "100%" }}
-       >
-        <FloatingXButton onClick={handleXModal}><XCircle className="iconX" /> </FloatingXButton>
-       </ContainerButtonX>
-         {modalContent === "location" && <ModalUbi onSave={handleSaveLocation} />}
-         {modalContent === "date" && <Calendar onSave={handleSaveDate} />}
-         {modalContent === "Recomendacion" && (
-           <Recomendacion
-             onSave={handerSaveRecomds}
-             existingData={recomendacion}
-             onX={handleXModal}
-           />
-         )}
-       </ModalContent>
-     </ModalOverlay>
-      )}
-    </Container>
-  );
+      <ModalOverlay>
+        <ModalContent
+          onClick={(e) => e.stopPropagation()}
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
+          <ContainerButtonX
+            whileHover={{ scale: 1.2, rotate: 90 }}
+            whileTap={{ scale: 0.8, rotate: -90, borderRadius: "100%" }}
+          >
+            <FloatingXButton onClick={handleXModal}>
+              <XCircle className="iconX" />
+            </FloatingXButton>
+          </ContainerButtonX>
+
+          {/* Aquí, en lugar de mostrar las modales normales, se muestra Loader si todas las tareas están completas */}
+          {showSearchComponent ? (
+            <SearchComponent handleXModal={handleXModal}  />
+          ) : (
+            <>
+              {modalContent === "location" && <ModalUbi onSave={handleSaveLocation} />}
+              {modalContent === "date" && <Calendar onSave={handleSaveDate} />}
+              {modalContent === "Recomendacion" && (
+                <Recomendacion
+                  onSave={handerSaveRecomds}
+                  existingData={recomendacion}
+                  onX={handleXModal}
+                />
+              )}
+            </>
+          )}
+        </ModalContent>
+      </ModalOverlay>
+    )}
+  </Container>
+);
 }

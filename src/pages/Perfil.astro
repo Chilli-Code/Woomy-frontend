@@ -1,3 +1,12 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Perfil from '../components/Home/PagePerfil';
 ---
+
+<Layout title="Welcome to Astro.">
+	<div class="containerLogin">
+      <Perfil client:only="react" />
+
+	</div>
+  </Layout>
+  

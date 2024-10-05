@@ -1,14 +1,19 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Slider from './Guia';
-import Register from './Register';
+import React, { useState } from 'react';
+import MapComponent from '../components/ui/Map';  // Importa el archivo MapComponent
+import HelpCenter from '../components/ui/InfoMap';  // Importa el archivo InfoMap (HelpCenter)
 
-export default function App() {
+const App = () => {
+  const [travelTime, setTravelTime] = useState('');  // Estado compartido
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Slider />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </Router>
+    <div>
+      {/* MapComponent actualiza el estado travelTime */}
+      <MapComponent setTravelTime={setTravelTime} />
+
+      {/* HelpCenter recibe travelTime como prop */}
+      <HelpCenter travelTime={travelTime} />
+    </div>
   );
-}
+};
+
+export default App;
